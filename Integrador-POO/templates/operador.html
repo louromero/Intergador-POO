@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/flaticon.ico">
+    <title>REMIS</title>
+</head>
+<body>
+    
+    <section class="section5" id="section5">
+            
+        <div >
+            <img id="logo1" src="https://cdn.worldvectorlogo.com/logos/remis.svg" >
+            
+        </div>
+
+        <div class="botones-menu" id="botones-menu">
+            <a href="{{url_for('inicio')}}"><button type="button" class="btn btn-outline-dark" >Cerrar sesión</button> </a>
+            <a ><button type="" class="btn btn-outline-dark" >{{datos.nombre}}</button> </a>
+
+        </div>
+
+    </section>
+
+    
+
+    <section class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8"> <!--col-lg-2-->
+                <ul class="nav nav-tabs flex-lg-fow" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Solicitar móvil</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Consultar móvil</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false">Viajes realizados</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-10">          
+                <div class="tab-content" id="myTabContent">
+                    
+
+                    <!-------------------------------------------------------------------------ASIGNAR MOVIL------------------------------------------------------------------>
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row funcionalidad align-items-center">
+                            <div class="col-lg-15">
+                                <h2 style="text-align:center;">ASIGNAR MOVIL</h2>
+                                <hr>
+                                
+                                {% if viajes_sin_movil |length == 0 %}
+                                <p style="text-align:center;">No hay solicitudes por asignar</p>
+                                {% else %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Cliente</th>
+                                            <th scope="col">Origen</th>
+                                            <th scope="col">Destino</th>
+                                            <th scope="col">Pasajeros</th>
+                                            <th scope="col">Equipaje</th>
+                                            <th scope="col">Móvil</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>                                   
+                                            {% for viaje in viajes_sin_movil %}
+                                            <tr>
+                                                <td>{{viaje.dniCliente}}</td>                                                                                        
+                                                <td>{{viaje.origen}}</td>
+                                                <td>{{viaje.destino}}</td>
+                                                <td>{{viaje.pasajeros}}</td>
+                                                {% if viaje.equipaje == 1 %}
+                                                    <td>Sí</td>
+                                                {% else %}
+                                                    <td>No</td>
+                                                {% endif %}
+                                                <td>
+                                                    <form  action="{{url_for('asignar_movil',operador_dni = datos.dni, id_viaje = viaje.idViaje)}}" method="POST">
+                                                        <label for="demora" class="form-label">Número del movil</label>
+                                                        <select class="form-control w-50" name="numMovil">
+                                                            {% for movil in moviles %}
+                                                                <option value="{{movil.numero}}">{{movil.numero}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="demora" class="form-label">Demora</label>
+                                                        <input type="number" class="form-control w-50" name="demora" min="0" value="0" required>
+                                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Asignar</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endfor %}
+                                        </tbody>
+                                    </table> 
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!------------------------------------------------------------FINALIZAR VIAJE------------------------------------------------------------->
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row funcionalidad align-items-center justify-content-between">
+                            <div class="col-sm">
+                                <h2 style="text-align:center;">FINALIZAR VIAJE</h2>
+                                <hr>
+                                {% if viajes_sin_finalizar |length == 0 %}
+                                <p>No hay viajes para finalizar</p>
+                                {% else %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Cliente</th>
+                                            <th scope="col">Origen</th>
+                                            <th scope="col">Destino</th>
+                                            <th scope="col">Pasajeros</th>
+                                            <th scope="col">Equipaje</th>
+                                            <th scope="col">Móvil</th>
+                                            <th scope="col">Duración</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>                               
+                                            {% for viaje in viajes_sin_finalizar %}
+                                            <!-- SE MUESTRA LOS VIAJES CON MOVIL ASIGNADO Y DURACION NULA -->
+                                            <tr>
+                                                <td>{{viaje.dniCliente}}</td>                                                                                        
+                                                <td>{{viaje.origen}}</td>
+                                                <td>{{viaje.destino}}</td>
+                                                
+                                                <td>{{viaje.pasajeros}}</td>
+                                                {% if viaje.equipaje == 1 %}
+                                                    <td>Sí</td>
+                                                {% else %}
+                                                    <td>No</td>
+                                                {% endif %}
+                                                <td>{{viaje.numMovil}}</td>
+                                                <td>
+                                                    <form action="{{url_for('finalizar_viaje',operador_dni = datos.dni, id_viaje = viaje.idViaje)}}" method="POST">
+                                                        <input type="number" class="form-control w-50" min="5" max="1440" name="duracion" required>
+                                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Asignar</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}                                           
+                                        </tbody>
+                                    </table> 
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-------------------------------------------VIAJES REALIZADOS------------------------------------------------------------------>
+                    <div class="tab-pane fade " id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row funcionalidad align-items-center">
+                            <div class="col-lg-8" style="margin-left: 180px;">
+                                {% if estado == False %}
+                                <h2 style="text-align:center;">VIAJES REALIZADOS</h2>
+                                <hr>
+                                <form  action="{{url_for('consultar_viajes',operador_dni = datos.dni,estado = True)}}" method="POST">
+                                    <label for="demora" class="form-label">Número de movil</label>
+                                    <select class="form-control" name="numMovil">
+                                        {% for movil in moviles %}
+                                            <option value="{{movil.numero}}">{{movil.numero}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-group">
+                                        <label for="fecha" class="col-2 col-form-label">Fecha</label>
+                                        <input class="form-control" type="date" value="2021-06-15" name="fecha">
+                                      </div>
+                                    <button type="submit" class="btn btn-primary mt-2 mb-2" style="text-align: center;">Seleccionar</button>
+                                </form>
+                                {% else %}
+                                    <div class="d-flex justify-content-between">
+                                        <h2>MÓVIL NÚMERO {{numero_movil}} </h2>
+                                        <h2>{{fechaM}}</h2>
+                                    </div>
+                                    
+                                    <hr> 
+                                    {% if viajes_realizados | length == 0 %}
+                                        <h3>No se han registrado viajes el día {{fechaM}}</h3>
+                                    {% else %}
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Origen</th>
+                                                <th scope="col">Destino</th>
+                                                <th scope="col">Demora</th>
+                                                <th scope="col">Duración</th>
+                                                <th scope="col">Importe $</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>                               
+                                                {% for viaje in viajes_realizados %}
+                                                <!-- SOLO MUESTRO VIAJES CON MOVIL ASIGNADO Y DURACION NULA PARA FINALIZARLOS -->
+                                                <tr>                                                                                       
+                                                    <td>{{viaje.origen}}</td>
+                                                    <td>{{viaje.destino}}</td>
+                                                    <td>{{viaje.demora}}</td>
+                                                    <td>{{viaje.duracion}}</td>
+                                                    <td>{{viaje.importe}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td>Total:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td class="text-success">{{importe}}</td>
+                                                </tr>                                           
+                                            </tbody>
+                                        </table> 
+                                    </div>
+                                    {% endif %}
+                                    <form  action="{{url_for('volver',operador_dni = datos.dni)}}" method="POST">
+                                        <button type="submit" class="btn btn-primary ">Volver</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>           
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--Js bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>  
+    <!--Js JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            //Quita el doble submit al refrescar la pagina
+            if (window.history.replaceState) { // verificamos disponibilidad
+                window.history.replaceState(null, null, window.location.href);
+            }
+            $("#mimodal").modal('show');
+        });
+    </script>
+</body>
+</html>

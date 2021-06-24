@@ -1,0 +1,131 @@
+body {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: "main" "footer";
+    overflow-x: hidden;
+    background: #f5f7fa;
+    min-height: 10vh;
+    font-family: "Open Sans", sans-serif;
+  }
+
+/*-----------------------------------LOGO--------------------------------------------*/
+#logo1{
+    margin-top: 30px;
+    height: 25px;
+    position: absolute;
+  }
+  
+.section5{
+    z-index: 1000;
+    position: fixed;
+    background-color: #8fc2e0;
+    text-align: center;
+    height: 10%;
+    width: 100%;
+}
+
+/*------------------------------------LISTA BOTONES-------------------------------------------*/
+  
+.botones-menu{
+    margin-top: 27px;
+    margin-left:80%;
+}
+.btn{
+    margin-left:2%;
+}
+
+/*------------------------------BIENVENIDA-------------------------------------------*/
+.section1{
+    margin-top: 30px;
+    background-image: url(https://cdn2.civitatis.com/argentina/buenos-aires/guia/remis.jpg);
+    width: 100%;
+    height: 670px;
+    padding-top: 70px;
+    background-size: cover;
+}
+  
+.cinta1{
+  
+    top: 15%;
+    left:60%;
+    width: 25%;
+    padding: 15px;
+    color: white;
+    font-size: 30px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+  
+.cinta2{
+  
+    top: 10%;
+    left:60%;
+    padding: 15px;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+  
+.titulo{
+    letter-spacing: 6px;
+    font-weight:500;
+}
+  
+p{
+    font-weight:350;
+}
+
+  /*---------------------------------------CARRUSEL----------------------------------------------*/
+.section2{
+	width: 70%;
+	height: 800px;
+  margin-left: 16%;
+}
+
+.carousel-inner{
+  margin-top: 20px;
+  height: 800px;
+}
+
+/*------------------------------INICIAR SESION--------------------------------------*/
+.iniciarSesion{
+    padding: 2%;
+    border-radius: 10px;
+    box-shadow: 8px 70px 263px -80px #000;
+
+}
+.iniciarSesion h1{
+    font-size: 1.8rem;
+}
+
+.container{
+    padding-top: 90px;
+}
+
+/*------------------------------CLIENTE--------------------------------------*/
+.section3{
+    margin-top:8%;
+    margin-left: 44%;
+
+}
+
+/*------------------------------MIS VIAJES--------------------------------------*/
+.misviajes{
+    width: 100%;
+    height: 950px;
+}
+
+/* - Funcionalidades */
+
+.funcionalidad{
+    background: white;
+    padding: 5%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.funcionalidad h2{
+    font-size: 2rem;
+    font-weight: 400;
+}
